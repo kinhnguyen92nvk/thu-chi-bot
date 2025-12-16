@@ -47,6 +47,17 @@ const ENV = {
 
 if (!ENV.BOT_TOKEN) throw new Error("Missing BOT_TOKEN");
 if (!ENV.GOOGLE_SHEET_ID) throw new Error("Missing GOOGLE_SHEET_ID");
+// ===== Railway fix: write service account from ENV =====
+if (
+  !fs.existsSync(ENV.GOOGLE_KEY_FILE) &&
+  process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+) {
+  fs.writeFileSync(
+    ENV.GOOGLE_KEY_FILE,
+    process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
+    "utf8"
+  );
+}
 if (!fs.existsSync(ENV.GOOGLE_KEY_FILE)) {
   throw new Error(`Missing GOOGLE_KEY_FILE: ${ENV.GOOGLE_KEY_FILE}`);
 }
